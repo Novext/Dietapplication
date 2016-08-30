@@ -13,8 +13,6 @@ import com.facebook.login.widget.LoginButton;
 
 public class MainActivity extends AppCompatActivity {
 
-    CallbackManager callbackManager;
-    LoginButton loginButton;
 
 
     @Override
@@ -23,33 +21,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-        callbackManager = CallbackManager.Factory.create();
-
-        loginButton = (LoginButton) findViewById(R.id.login_button);
-
-        loginButton.setReadPermissions("email");
-
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                Toast.makeText(MainActivity.this, loginResult.getAccessToken().getUserId(), Toast.LENGTH_SHORT).show();
-                Toast.makeText(MainActivity.this, loginResult.getAccessToken().getToken(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-
-            @Override
-            public void onError(FacebookException error) {
-
-            }
-        });
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        callbackManager.onActivityResult(requestCode,resultCode,data);
-    }
+
 }
