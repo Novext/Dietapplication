@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "720274854069",
+    "firebase_url": "https://novext-8e299.firebaseio.com",
+    "project_id": "novext-8e299",
+    "storage_bucket": "novext-8e299.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:720274854069:android:16a5b43e219ac66e",
+        "android_client_info": {
+          "package_name": "com.novext.dietapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "720274854069-0l0c4gjksg4v8bhqpug05o66pjv24gkj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxrifrZaBfdj5cufjoyUbR6Mw6_VDiUro"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
