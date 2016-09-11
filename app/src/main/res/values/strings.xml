@@ -9,4 +9,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="TitleDietHomeFragment">DIETAS</string>
+    <string name="TitleExercisesHomeFragment">EJERCICIO</string>
+    <string name="TitleFriendsHomeFragment">AMIGOS</string>
+    <string name="TitleChatHomeFragment">CHAT</string>
+
 </resources>

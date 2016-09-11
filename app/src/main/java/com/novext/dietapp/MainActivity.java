@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,106 +16,94 @@ import android.view.MenuItem;
 
 import com.novext.dietapp.FragmentNavigationDrawer.FirstFragment;
 import com.novext.dietapp.FragmentNavigationDrawer.FourFragment;
+import com.novext.dietapp.FragmentNavigationDrawer.HomeFragment;
 import com.novext.dietapp.FragmentNavigationDrawer.SecondFragment;
 import com.novext.dietapp.FragmentNavigationDrawer.ThirdFragment;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
-    private DrawerLayout mDrawer;
-    NavigationView nvDrawer;
-    private ActionBarDrawerToggle drawerToggle;
-
+    private DrawerLayout drawerLayout;
+    NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        setToolbar();
+        AddToolbar();
 
-        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawerToggle = setupDrawerToggle();
-        mDrawer.addDrawerListener(drawerToggle);
-        nvDrawer = (NavigationView) findViewById(R.id.nvView);
-        setupDrawerContent(nvDrawer);
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationView  = (NavigationView) findViewById(R.id.nvView);
+
+        if (navigationView!= null){
+
+            AddDrawer(navigationView);
+            selectItem(navigationView.getMenu().getItem(0));
+        }
 
     }
 
-    private ActionBarDrawerToggle setupDrawerToggle(){
-        return new ActionBarDrawerToggle(this,mDrawer,toolbar,R.string.drawer_open,R.string.drawer_close);
-    }
-    protected void onPostCreate(Bundle saveInstancesState){
-        super.onPostCreate(saveInstancesState);
-        drawerToggle.syncState();
-    }
-    public void onConfigurationChanged(Configuration newConfig){
-        super.onConfigurationChanged(newConfig);
+    public void selectItem (MenuItem item){
+        Fragment fragmentGeneric = null;
+        FragmentManager fragmentManager = getSupportFragmentManager();
 
-        drawerToggle.onConfigurationChanged(newConfig);
+        switch (item.getItemId()){
+            case R.id.nav_home_fragment:
+                fragmentGeneric = new HomeFragment();
+                break;
+            case R.id.nav_first_fragment:
+                fragmentGeneric = new FirstFragment();
+                break;
+            case R.id.nav_second_fragment:
+                fragmentGeneric = new SecondFragment();
+                break;
+            case R.id.nav_third_fragment:
+                fragmentGeneric = new ThirdFragment();
+                break;
+            case R.id.nav_four_fragment:
+                fragmentGeneric = new FourFragment();
+        }
+        if (fragmentGeneric !=null){
+            fragmentManager.beginTransaction().replace(R.id.frameContent,fragmentGeneric).commit();
+        }
+        setTitle(item.getTitle());
     }
-    private void setupDrawerContent(NavigationView navigationView){
+    private void AddDrawer(NavigationView navigationView){
         navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener(){
-
+                new NavigationView.OnNavigationItemSelectedListener() {
                     @Override
-                    public boolean onNavigationItemSelected(MenuItem menuItem) {
-
-                        selectDrawerItem(menuItem);
+                    public boolean onNavigationItemSelected(MenuItem item) {
+                        item.setCheckable(true);
+                        selectItem(item);
+                        drawerLayout.closeDrawers();
                         return true;
                     }
                 }
         );
+
     }
-    public void selectDrawerItem(MenuItem menuItem){
-        Fragment fragment = null;
-        Class fragmentClass;
-
-        switch (menuItem.getItemId()){
-            case R.id.nav_first_fragment:
-                fragmentClass = FirstFragment.class;
-                break;
-            case R.id.nav_second_fragment:
-                fragmentClass = SecondFragment.class;
-                break;
-            case R.id.nav_third_fragment:
-                fragmentClass  = ThirdFragment.class;
-                break;
-            case R.id.nav_four_fragment:
-                fragmentClass  = FourFragment.class;
-                break;
-            default:
-                fragmentClass  = FirstFragment.class;
+    private void AddToolbar(){
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        final ActionBar ab  = getSupportActionBar();
+        if (ab!=null){
+            ab.setHomeAsUpIndicator(R.mipmap.drawer_toggle);
+            ab.setDisplayHomeAsUpEnabled(true);
         }
-        try{
-            fragment = (Fragment) fragmentClass.newInstance();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        fragmentManager.beginTransaction().replace(R.id.frameContent,fragment).commit();
-
-        menuItem.setCheckable(true);
-        setTitle(menuItem.getTitle());
-        mDrawer.closeDrawers();
     }
     public boolean onCreateOptionsMenu(Menu menu){
-        if (!mDrawer.isDrawerOpen(GravityCompat.START)){
-            getMenuInflater().inflate(R.menu.nav_menu , menu);
-        }
-        return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.drawer_view ,menu);
+        return true;
     }
+
     public boolean onOptionsItemSelected(MenuItem item){
-        if (drawerToggle.onOptionsItemSelected(item)){
-            return true;
+        switch (item.getItemId()){
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    private void setToolbar(){
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-    }
-}
 
+}

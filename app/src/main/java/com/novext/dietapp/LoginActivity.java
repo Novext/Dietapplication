@@ -1,12 +1,14 @@
 package com.novext.dietapp;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.CallbackManager;
@@ -72,10 +74,28 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             }
         });
-
+        String txtGoggle = "Inciar sesión con Goggle";
+        setGooglePlusButtonText(btnLoginGoogle,txtGoggle);
 
     }
+   /*public void onConnected() {
+        //called after successful connection
+       setGooglePlusButtonText(btnLoginGoogle, R.string.drawer_close);
 
+    }*/
+    protected void setGooglePlusButtonText(SignInButton signInButton,String buttonText) {
+        for (int i = 0; i < signInButton.getChildCount(); i++) {
+            View v = signInButton.getChildAt(i);
+
+            if (v instanceof TextView) {
+                TextView tv = (TextView) v;
+                tv.setTextSize(15);
+                tv.setTypeface(null, Typeface.NORMAL);
+                tv.setText(buttonText);
+                return;
+            }
+        }
+    }
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
