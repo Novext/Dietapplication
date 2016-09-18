@@ -2,5 +2,18 @@
     <string name="app_name">Dietapp</string>
 
     <string name="facebook_app_id">646732948827921</string>
-    <string name="server_client_id" >720274854069-lf247l5353c6ch9que1tc9hp8759hr27.apps.googleusercontent.com</string>
+    <!--<string name="facebook_app_id">1115877665114558</string>-->
+
+    <string name="server_client_id">720274854069-lf247l5353c6ch9que1tc9hp8759hr27.apps.googleusercontent.com</string>
+
+    <string name="drawer_open">Abrir navigation drawe</string>
+    <string name="drawer_close">Cerrar navigation drawer</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="TitleDietHomeFragment">DIETAS</string>
+    <string name="TitleExercisesHomeFragment">EJERCICIO</string>
+    <string name="TitleFriendsHomeFragment">AMIGOS</string>
+    <string name="TitleChatHomeFragment">CHAT</string>
+
 </resources>
