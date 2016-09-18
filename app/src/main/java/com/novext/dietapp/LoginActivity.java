@@ -11,9 +11,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphRequestAsyncTask;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -23,6 +27,18 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.auth.api.*;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.GoogleApiClient;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener,View.OnClickListener {
 
@@ -38,7 +54,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         setContentView(R.layout.activity_login);
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.server_client_id))
+                //.requestIdToken(getString(R.string.server_client_id))
                 .requestEmail()
                 .build();
 
@@ -46,8 +62,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
         btnLoginGoogle.setOnClickListener(this);
 
         mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .enableAutoManage(this , this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
         callbackManager = CallbackManager.Factory.create();
 
@@ -62,27 +78,43 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             public void onSuccess(LoginResult loginResult) {
                 Toast.makeText(LoginActivity.this, loginResult.getAccessToken().getUserId(), Toast.LENGTH_SHORT).show();
                 Toast.makeText(LoginActivity.this, loginResult.getAccessToken().getToken(), Toast.LENGTH_SHORT).show();
-            }
 
+                final AccessToken accessToken = loginResult.getAccessToken();
+
+                final JSONObject obj = new JSONObject();
+                final OKHttp okHttp = new OKHttp();
+                final String url  = "https://dietapplication.herokuapp.com/api/users/social";
+
+                GraphRequestAsyncTask request_faccebook = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject user, GraphResponse graphResponse) {
+
+
+                        try {
+                            obj.put("firstname",user.optString("name"));
+                            obj.put("lastname",user.optString("email"));
+                            Log.e("AQUI OBTENIENDO LOS DATOS DEL USUARIO", String.valueOf(obj));
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).executeAsync();
+            }
             @Override
             public void onCancel() {
 
             }
-
             @Override
             public void onError(FacebookException error) {
-
+                Log.e("AQUI ERROR 2", String.valueOf(error));
             }
         });
         String txtGoggle = "Inciar sesión con Goggle";
         setGooglePlusButtonText(btnLoginGoogle,txtGoggle);
-
     }
-   /*public void onConnected() {
-        //called after successful connection
-       setGooglePlusButtonText(btnLoginGoogle, R.string.drawer_close);
 
-    }*/
+
     protected void setGooglePlusButtonText(SignInButton signInButton,String buttonText) {
         for (int i = 0; i < signInButton.getChildCount(); i++) {
             View v = signInButton.getChildAt(i);
@@ -119,8 +151,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
             handleSignInResult(result);
             startActivity(new Intent(this, MainActivity.class));
-
-            return;
         }
 
         callbackManager.onActivityResult(requestCode,resultCode,data);
@@ -128,19 +158,31 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     }
 
     private void handleSignInResult(GoogleSignInResult result) {
+        JSONObject obj = new JSONObject();
+        OKHttp okHttp = new OKHttp();
+        String url = "https://dietapplication.herokuapp.com/api/users/social";
         Log.d("TAG", "handleSignInResult:" + result.isSuccess());
         if (result.isSuccess()) {
-//            // Signed in successfully, show authenticated UI.
-            GoogleSignInAccount acct = result.getSignInAccount();
 
-            Toast.makeText(LoginActivity.this, acct.getDisplayName(), Toast.LENGTH_SHORT).show();
+            GoogleSignInAccount account = result.getSignInAccount();
+            if (account!=null){
+                Log.d("OBTENIENDO EN EMAIL :: ", account.getEmail());
+                Log.d("OBTENIENDO EN NAME  :: ", account.getDisplayName());
+                try {
+                    Toast.makeText(LoginActivity.this, account.getDisplayName(), Toast.LENGTH_SHORT).show();
+                    obj.put("firstname",account.getDisplayName());
+                    obj.put("email",account.getEmail());
+                    Log.d("ENVIANDO TODOS LOS DATOS ==========>", String.valueOf(obj));
+                    //okHttp.post(url,obj);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }else{
+            String a  = "JULIO";
+            Log.d("HOLA HAY ERRORES :D",a);
         }
-//            mStatusTextView.setText(getString(R.string.signed_in_fmt, acct.getDisplayName()));
-//            updateUI(true);
-//        } else {
-//            // Signed out, show unauthenticated UI.
-//            updateUI(false);
-//        }
     }
 
     private void signIn() {
