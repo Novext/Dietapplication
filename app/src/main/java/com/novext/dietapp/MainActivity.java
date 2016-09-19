@@ -1,5 +1,6 @@
 package com.novext.dietapp;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.drawer_view ,menu);
+        getMenuInflater().inflate(R.menu.profile_user ,menu);
         return true;
     }
 
@@ -101,9 +102,12 @@ public class MainActivity extends AppCompatActivity {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
+            case R.id.userProfile:
+                Intent intent = new Intent(this,ProfileActivity.class);
+                this.startActivity(intent);
+                break;
+            default:
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 }
