@@ -21,8 +21,9 @@ public class DietCardView extends RecyclerView.Adapter<DietCardView.ViewHolder>{
 
     private List<Diet> items;
 
-    public DietCardView(List<Diet> items) {
-        this.items = items;
+
+    public void setData(List<Diet> _items){
+        items = _items;
     }
 
     @Override
@@ -33,9 +34,9 @@ public class DietCardView extends RecyclerView.Adapter<DietCardView.ViewHolder>{
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.title_diet.setText(items.get(position).getTxtTitle());
-        holder.subTitle_diet.setText(items.get(position).getTxtSubTitle());
-        holder.description_diet.setText(items.get(position).getTxtDescription());
+        holder.title_diet.setText(items.get(position).getTitle());
+        holder.subTitle_diet.setText(items.get(position).getSubtitle());
+        holder.description_diet.setText(items.get(position).getDescription());
         holder.rantingbar_diet.setRating(items.get(position).getRatingBar());
 
     }

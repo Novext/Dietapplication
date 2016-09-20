@@ -1,6 +1,7 @@
 package com.novext.dietapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -93,7 +94,6 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                         try {
                             obj.put("firstname",user.optString("name"));
                             obj.put("lastname",user.optString("email"));
-                            Log.e("AQUI OBTENIENDO LOS DATOS DEL USUARIO", String.valueOf(obj));
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -110,8 +110,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 Log.e("AQUI ERROR 2", String.valueOf(error));
             }
         });
-        String txtGoggle = "Inciar sesión con Goggle";
-        setGooglePlusButtonText(btnLoginGoogle,txtGoggle);
+        String txtGoogle = "Iniciar sesión con Google";
+        setGooglePlusButtonText(btnLoginGoogle,txtGoogle);
     }
 
 
@@ -166,13 +166,22 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
             GoogleSignInAccount account = result.getSignInAccount();
             if (account!=null){
-                Log.d("OBTENIENDO EN EMAIL :: ", account.getEmail());
-                Log.d("OBTENIENDO EN NAME  :: ", account.getDisplayName());
                 try {
                     Toast.makeText(LoginActivity.this, account.getDisplayName(), Toast.LENGTH_SHORT).show();
                     obj.put("firstname",account.getDisplayName());
                     obj.put("email",account.getEmail());
-                    Log.d("ENVIANDO TODOS LOS DATOS ==========>", String.valueOf(obj));
+                    Log.d("OBTENIENDO EN EMAIL :: ", account.getEmail());
+                    Log.d("OBTENIENDO EN NAME  :: ", account.getDisplayName());
+
+                    final String MY_PREFS_NAME = "MyPrefsFile";
+
+                    SharedPreferences.Editor editor_profile = getSharedPreferences(MY_PREFS_NAME, MODE_PRIVATE).edit();
+                    editor_profile.putString("firstname",account.getDisplayName());
+                    editor_profile.putString("email",account.getEmail());
+
+                    Log.d("ENVIANDO TODOS LOS DATOS ==========>", String.valueOf(editor_profile));
+                    editor_profile.commit();
+
                     //okHttp.post(url,obj);
 
                 } catch (JSONException e) {

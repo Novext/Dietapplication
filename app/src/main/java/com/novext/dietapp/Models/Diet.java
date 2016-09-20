@@ -7,30 +7,52 @@ import android.widget.RatingBar;
  */
 public class Diet {
 
-    private String txtTitle;
-    private String txtSubTitle;
-    private String txtDescription;
+    private String title;
+    private String subtitle;
+    private String description;
     private float ratingBar;
 
     public Diet(String hola, String txtDescription, String txtTitle, String txtSubTitle, float ratingBar) {
-        this.txtDescription = txtDescription;
-        this.txtTitle = txtTitle;
-        this.txtSubTitle = txtSubTitle;
+        this.description = txtDescription;
+        this.title = txtTitle;
+        this.subtitle = txtSubTitle;
         this.ratingBar = ratingBar;
     }
 
-    public String getTxtTitle() {
-        return txtTitle;
+    public Diet(){
+
     }
 
-    public String getTxtSubTitle() {
-        return txtSubTitle;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public String getTxtDescription() {
-        return txtDescription;
+    public void setRatingBar(float ratingBar) {
+        this.ratingBar = ratingBar;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setSubtitle(String subtitle) {
+        this.subtitle = subtitle;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getSubtitle() {
+        return subtitle;
+    }
+
+    public String getDescription() {
+        return description;
     }
     public float getRatingBar(){
         return ratingBar;
     }
+
+
 }
